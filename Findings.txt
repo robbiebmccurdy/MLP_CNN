@@ -15,9 +15,19 @@ MLP
 			Accuracy for class: ship  is 64.2 %
 			Accuracy for class: truck is 55.4 %
 
+		Seems to be a toss-up on whether or not the model can determine things overall. However, upon individual inspection, it seems as though we are
+		doing fairly well with finding cars, planes, and ships. The reverse of this though, we are doing extremely poor finding cats and birds. Ideally
+		we'd like these numbers to be close to 70% but that may be too optimistic for this model/project. So we will shoot for hopefully an overall
+		network accuracy of ~60%.
+
 	MLP2.
+		In the MLP model for the CIFAR-10 dataset, incorporating a validation step significantly enhances training effectiveness. Through regular validation checks after each training epoch, I can pinpoint the ideal moment to halt training, helping to prevent overfitting. This is evident when the model performs increasingly well on training data but starts faltering on validation data.
+
+		Moreover, validation insights are key in fine-tuning hyperparameters and adjusting the model's architecture. If the model underperforms on the validation set, it suggests a need for modifications—perhaps a more complex structure or extended training. Conversely, a pronounced gap between training and validation performance could indicate overfitting, necessitating the introduction of regularization methods. Ultimately, this approach ensures the model's robust generalization, preparing it for effective real-world application.
 
 	MLP3.
+
+
 
 CNN
 	CNN1.
