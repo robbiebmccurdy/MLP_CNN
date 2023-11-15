@@ -25,9 +25,27 @@ MLP
 
 		Moreover, validation insights are key in fine-tuning hyperparameters and adjusting the model's architecture. If the model underperforms on the validation set, it suggests a need for modifications—perhaps a more complex structure or extended training. Conversely, a pronounced gap between training and validation performance could indicate overfitting, necessitating the introduction of regularization methods. Ultimately, this approach ensures the model's robust generalization, preparing it for effective real-world application.
 
+		Taking this cross-validation into account, our overall accuracy rose to 51% meanwhile many classes rose as well. Most notably, ships rose from 64.2% to 71.1% but a class like deer fell from 54.4% to 42.4% overall.
+
 	MLP3.
+		First, to address the accuracy measure, we can try to increase the amount of epochs we iterate against to train our data. I will be increasing the amount of epochs from 12 to 25. Below will be the updated accuracies of 25 epochs. 
 
+		Accuracy of 25 epochs:
+			Accuracy of the network on the 10000 test images: 50 %
+			Accuracy for class: plane is 53.1 %
+			Accuracy for class: car   is 58.8 %
+			Accuracy for class: bird  is 29.4 %
+			Accuracy for class: cat   is 33.3 %
+			Accuracy for class: deer  is 43.5 %
+			Accuracy for class: dog   is 41.6 %
+			Accuracy for class: frog  is 60.5 %
+			Accuracy for class: horse is 59.1 %
+			Accuracy for class: ship  is 68.5 %
+			Accuracy for class: truck is 55.3 %	
 
+		It seems increasing our epochs from 12 to 25 did very little, if not it seems the overall validation performed slightly worse but essentially the same. A great thing is that a class like cat has gone up in accuracy, but itseems classes around it have either stagnated or fallen.
+
+		Next, I will try adjusting the learning rate. To keep these fair, I will return epochs to 12 instead of 25. Then once we weight what changes the most, at the end I will implement all methods deemed valuable and check their accuracies.
 
 CNN
 	CNN1.

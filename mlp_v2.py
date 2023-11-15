@@ -61,10 +61,10 @@ mlp = MLP()
 
 # Define the loss function and optimizer
 loss_function = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(mlp.parameters(), lr=1e-4)
+optimizer = torch.optim.Adam(mlp.parameters(), lr=5e-4)
 
 # Run the training loop with validation
-for epoch in range(25):  # 12 epochs -> 25 epochs
+for epoch in range(12):  # 12 epochs -> 25 epochs
     print(f'Starting epoch {epoch+1}')
     mlp.train()  # Set the model to training mode
     current_loss = 0.0
