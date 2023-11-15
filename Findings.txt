@@ -47,6 +47,24 @@ MLP
 
 		Next, I will try adjusting the learning rate. To keep these fair, I will return epochs to 12 instead of 25. Then once we weight what changes the most, at the end I will implement all methods deemed valuable and check their accuracies.
 
+		Accuracy for 5e-4 learning rate: 
+
+			Accuracy of the network on the 10000 test images: 48 %
+			Accuracy for class: plane is 48.9 %
+			Accuracy for class: car   is 50.8 %
+			Accuracy for class: bird  is 35.4 %
+			Accuracy for class: cat   is 31.0 %
+			Accuracy for class: deer  is 42.0 %
+			Accuracy for class: dog   is 44.1 %
+			Accuracy for class: frog  is 56.7 %
+			Accuracy for class: horse is 52.3 %
+			Accuracy for class: ship  is 73.7 %
+			Accuracy for class: truck is 53.7 %
+
+		With an updated learning rate, it seems like our overall accuracy has decreased, but upon closer inspection I'd say it seems that our lower end of accuracy has actually improved. The parts that have decreased are mostly all other fields except for ship which has rose to 73.7%. This indicates that potentially learning rate could drive accuracy up, but th is learning rate may be far too great.
+
+		I've tested the learning rates 0.5e-4 and 2.5e-4 as well, and it seems like this value does have an effect but the best overall accuracy has been achieved with 1e-4. The learning rate will be reverted to 1e-4 and another method will be implemented.
+
 CNN
 	CNN1.
 

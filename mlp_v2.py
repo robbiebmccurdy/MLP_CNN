@@ -35,8 +35,10 @@ class MLP(nn.Module):
             nn.Flatten(),
             nn.Linear(32 * 32 * 3, 64),
             nn.ReLU(),
+            nn.Dropout(0.5), # adding dropout
             nn.Linear(64, 32),
             nn.ReLU(),
+            nn.Dropout(0.5), #a adding dropout
             nn.Linear(32, 10)
         )
 
@@ -61,8 +63,8 @@ mlp = MLP()
 
 # Define the loss function and optimizer
 loss_function = nn.CrossEntropyLoss()
-# Adjusting learning rate from 1e-4 to 5e-4
-optimizer = torch.optim.Adam(mlp.parameters(), lr=5e-4)
+# Adjusting learning rate from 1e-4 to 5e-4 (Reverted back)
+optimizer = torch.optim.Adam(mlp.parameters(), lr=1e-4)
 
 # Run the training loop with validation
 for epoch in range(12):  # 12 epochs -> 25 epochs (Reverted to 12)
