@@ -1,0 +1,39 @@
+MLP
+	MLP1.
+
+		Accuracy: 
+
+			Accuracy of the network on the 10000 test images: 50 %
+			Accuracy for class: plane is 57.4 %
+			Accuracy for class: car   is 59.9 %
+			Accuracy for class: bird  is 35.6 %
+			Accuracy for class: cat   is 23.7 %
+			Accuracy for class: deer  is 54.4 %
+			Accuracy for class: dog   is 41.8 %
+			Accuracy for class: frog  is 57.4 %
+			Accuracy for class: horse is 56.6 %
+			Accuracy for class: ship  is 64.2 %
+			Accuracy for class: truck is 55.4 %
+
+	MLP2.
+
+	MLP3.
+
+CNN
+	CNN1.
+
+	CNN2.
+
+	CNN3.
+
+CC
+	CC1.
+
+PB
+	PB1.
+
+	PB2.
+
+	PB3.
+
+	PB4.

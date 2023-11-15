@@ -7,61 +7,54 @@ import torch
 import torchvision
 from torch import nn
 from torchvision.datasets import CIFAR10
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, random_split
 from torchvision import transforms
+import matplotlib.pyplot as plt
+import numpy as np
 
+# Define the batch size
+batch_size = 4
 
+# Transformations for the input data
 transform = transforms.Compose(
     [transforms.ToTensor(),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
-
-#########
-import matplotlib.pyplot as plt
-import numpy as np
-
+# Function to show an image
 def imshow(img):
     img = img / 2 + 0.5     # unnormalize
     npimg = img.numpy()
     plt.imshow(np.transpose(npimg, (1, 2, 0)))
     plt.show()
 
-
+# Define the MLP model
 class MLP(nn.Module):
-  '''
-    Multilayer Perceptron.
-  '''
-  def __init__(self):
-    super().__init__()
-    self.layers = nn.Sequential(
-      nn.Flatten(),
-      nn.Linear(32 * 32 * 3, 64),
-      nn.ReLU(),
-      nn.Linear(64, 32),
-      nn.ReLU(),
-      nn.Linear(32, 10)
-    )
+    def __init__(self):
+        super().__init__()
+        self.layers = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(32 * 32 * 3, 64),
+            nn.ReLU(),
+            nn.Linear(64, 32),
+            nn.ReLU(),
+            nn.Linear(32, 10)
+        )
 
+    def forward(self, x):
+        return self.layers(x)
 
-  def forward(self, x):
-    '''Forward pass'''
-    return self.layers(x)
-  
-  
-# if __name__ == '__main__':
-  
 # Set fixed random number seed
 torch.manual_seed(42)
 
-batch_size=4
+# Prepare CIFAR-10 dataset and split into training and validation sets
+dataset = CIFAR10(root='./data', train=True, download=True, transform=transform)
+train_size = int(0.8 * len(dataset))
+validation_size = len(dataset) - train_size
+train_dataset, validation_dataset = random_split(dataset, [train_size, validation_size])
 
-
-# Prepare CIFAR-10 dataset
-dataset = CIFAR10(root='./data', train=True, download=True, 
-                  transform=transform)
-
-trainloader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=2)
-
+# Data loaders for training and validation sets
+trainloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
+validationloader = DataLoader(validation_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
 
 # Initialize the MLP
 mlp = MLP()
@@ -70,46 +63,49 @@ mlp = MLP()
 loss_function = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(mlp.parameters(), lr=1e-4)
 
-# Run the training loop
-for epoch in range(0, 12): # 12 epochs at maximum
-  
-  # Print epoch
-  print(f'Starting epoch {epoch+1}')
-  
-  # Set current loss value
-  current_loss = 0.0
-  
-  # Iterate over the DataLoader for training data
-  for i, data in enumerate(trainloader, 0):
-    
-    # Get inputs
-    inputs, targets = data
-    
-    # Zero the gradients
-    optimizer.zero_grad()
-    
-    # Perform forward pass
-    outputs = mlp(inputs)
-    
-    # Compute loss
-    loss = loss_function(outputs, targets)
-    
-    # Perform backward pass, ie compute the gradient 
-    loss.backward()
-    
-    # Perform optimization
-    optimizer.step()
-    
-    # Print statistics
-    current_loss += loss.item()
-    if i % 500 == 499:
-        print('Loss after mini-batch %5d: %.3f' %
-              (i + 1, current_loss / 500))
-        current_loss = 0.0
+# Run the training loop with validation
+for epoch in range(12):  # 12 epochs
+    print(f'Starting epoch {epoch+1}')
+    mlp.train()  # Set the model to training mode
+    current_loss = 0.0
+
+    # Training loop
+    for i, data in enumerate(trainloader, 0):
+        inputs, targets = data
+        optimizer.zero_grad()
+        outputs = mlp(inputs)
+        loss = loss_function(outputs, targets)
+        loss.backward()
+        optimizer.step()
+        current_loss += loss.item()
+        if i % 500 == 499:
+            print('Loss after mini-batch %5d: %.3f' % (i + 1, current_loss / 500))
+            current_loss = 0.0
+
+    # Validation step
+    mlp.eval()  # Set the model to evaluation mode
+    validation_loss = 0.0
+    correct = 0
+    total = 0
+    with torch.no_grad():
+        for data in validationloader:
+            inputs, targets = data
+            outputs = mlp(inputs)
+            loss = loss_function(outputs, targets)
+            validation_loss += loss.item()
+            _, predicted = torch.max(outputs.data, 1)
+            total += targets.size(0)
+            correct += (predicted == targets).sum().item()
+
+    # Print validation results
+    print(f'Validation loss after epoch {epoch+1}: {validation_loss / len(validationloader)}')
+    print(f'Validation accuracy: {100 * correct / total} %')
 
 # Process is complete.
 print('Training process has finished.')
 
+# Continue with the existing code for saving, testing, etc.
+# ...
 
 
 ## Save and Testing
