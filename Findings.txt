@@ -65,13 +65,69 @@ MLP
 
 		I've tested the learning rates 0.5e-4 and 2.5e-4 as well, and it seems like this value does have an effect but the best overall accuracy has been achieved with 1e-4. The learning rate will be reverted to 1e-4 and another method will be implemented.
 
+		Dropout. I've attempted to add dropout as a mechanic to increase overall accuracy. This mechanic has done nothing but decrerase accuracy. Our overall network accuracy decreased to 44% while numberes went as low as 13.6% for the bird class. Dropout is not a method I would continue to use.
+
+		Data augmentation. Implemented data augmentation that randomly horiziontally flips the data and does a random rotation. Then used it for the training set. This yielded an overall network accuracy of 51% with the highest accuracy being ships at 70.7% and the lowest cats at 29.0% which lines up with other methods just about.
+
+		It seems that data augmentation and increasing the learning rate had the most overall positive impact on the accuracy of the network. Dropout had the largest impact but it was largely negative decreasing our base accuracy from 50% to 44%.
+
 CNN
 	CNN1.
 
+		Accuracy: 
+
+			Accuracy of the network on the 10000 test images: 61 %
+			Accuracy for class: plane is 66.8 %
+			Accuracy for class: car   is 68.8 %
+			Accuracy for class: bird  is 43.2 %
+			Accuracy for class: cat   is 53.7 %
+			Accuracy for class: deer  is 63.9 %
+			Accuracy for class: dog   is 39.0 %
+			Accuracy for class: frog  is 66.6 %
+			Accuracy for class: horse is 66.5 %
+			Accuracy for class: ship  is 73.3 %
+			Accuracy for class: truck is 71.9 %
+
+			The loss was hitting below 1 even halfway through the iterations. That means that the loss was over half of it's original value by the time we were 5/10 iterations through.
+
 	CNN2.
+
+		To add cross-validation to this CNN model, I imported KFold from sklearn to split the data set into 5 folds. Then modified the training loop to iterate over each fold using a different subset of data for training/validation in each fold. Then inside each loop, data loaders for training and validation are created by basing it off the indicies of the K-Fold. The model is trained, saved, and evaluated on each fold.
+
+		Accuracy: 
+
+			Each fold seemed to hover anywhere from 59%-61% accuracy. The scores at the end were: 
+
+			Accuracy of the network on the 10000 test images: 60 %
+			Accuracy of plane : 65 %
+			Accuracy of   car : 71 %
+			Accuracy of  bird : 49 %
+			Accuracy of   cat : 34 %
+			Accuracy of  deer : 66 %
+			Accuracy of   dog : 50 %
+			Accuracy of  frog : 65 %
+			Accuracy of horse : 70 %
+			Accuracy of  ship : 74 %
+			Accuracy of truck : 60 %
 
 	CNN3.
 
+		Accuracy of the network on the 10000 test images: 60 %
+		Accuracy of plane : 65 %
+		Accuracy of   car : 71 %
+		Accuracy of  bird : 49 %
+		Accuracy of   cat : 34 %
+		Accuracy of  deer : 66 %
+		Accuracy of   dog : 50 %
+		Accuracy of  frog : 65 %
+		Accuracy of horse : 70 %
+		Accuracy of  ship : 74 %
+		Accuracy of truck : 60 %
+		Precision for "cat": 0.40
+		Recall for "cat": 0.34
+		F1 Score for "cat": 0.37
+
+		It really depends on our goal. If our goal is to minimize the amount of false 'cats' then we'd use precision. If our goal was to get as many 'cats' then we'd use recall. F1 is a balance of these two metrics, so I'd say that one is the most valuable unless our goal is specific.
 CC
 	CC1.
 

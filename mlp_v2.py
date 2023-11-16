@@ -15,8 +15,17 @@ import numpy as np
 # Define the batch size
 batch_size = 4
 
+# Augmented transformation for training data
+
+transform_augmented = transforms.Compose([
+    transforms.RandomHorizontalFlip(),  # Random horizontal flip
+    transforms.RandomRotation(10),      # Random rotation
+    transforms.ToTensor(),
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+])
+
 # Transformations for the input data
-transform = transforms.Compose(
+transform_original = transforms.Compose(
     [transforms.ToTensor(),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
@@ -35,10 +44,10 @@ class MLP(nn.Module):
             nn.Flatten(),
             nn.Linear(32 * 32 * 3, 64),
             nn.ReLU(),
-            nn.Dropout(0.5), # adding dropout
+            # nn.Dropout(0.5), # adding dropout (removed)
             nn.Linear(64, 32),
             nn.ReLU(),
-            nn.Dropout(0.5), #a adding dropout
+            # nn.Dropout(0.5), # adding dropout (removed)
             nn.Linear(32, 10)
         )
 
@@ -49,14 +58,20 @@ class MLP(nn.Module):
 torch.manual_seed(42)
 
 # Prepare CIFAR-10 dataset and split into training and validation sets
-dataset = CIFAR10(root='./data', train=True, download=True, transform=transform)
-train_size = int(0.8 * len(dataset))
-validation_size = len(dataset) - train_size
-train_dataset, validation_dataset = random_split(dataset, [train_size, validation_size])
+# Loading the datasets with the respective transformations
+train_dataset = CIFAR10(root='./data', train=True, download=True, transform=transform_augmented)
+validation_dataset = CIFAR10(root='./data', train=True, download=True, transform=transform_original)
+testset = torchvision.datasets.CIFAR10(root='./data', train=False, transform=transform_original, download=True)
 
-# Data loaders for training and validation sets
+# Splitting the training and validation datasets
+train_size = int(0.8 * len(train_dataset))
+validation_size = len(train_dataset) - train_size
+train_dataset, validation_dataset = random_split(train_dataset, [train_size, validation_size])
+
+# Creating the data loaders
 trainloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
 validationloader = DataLoader(validation_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
+testloader = DataLoader(testset, batch_size=batch_size, shuffle=False, num_workers=2)
 
 # Initialize the MLP
 mlp = MLP()
@@ -64,10 +79,10 @@ mlp = MLP()
 # Define the loss function and optimizer
 loss_function = nn.CrossEntropyLoss()
 # Adjusting learning rate from 1e-4 to 5e-4 (Reverted back)
-optimizer = torch.optim.Adam(mlp.parameters(), lr=1e-4)
+optimizer = torch.optim.Adam(mlp.parameters(), lr=5e-4)
 
 # Run the training loop with validation
-for epoch in range(12):  # 12 epochs -> 25 epochs (Reverted to 12)
+for epoch in range(25):  # 12 epochs -> 25 epochs (Reverted to 12)
     print(f'Starting epoch {epoch+1}')
     mlp.train()  # Set the model to training mode
     current_loss = 0.0
