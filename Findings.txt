@@ -1,141 +1,55 @@
 MLP
-	MLP1.
+MLP1.
+Accuracy:
+The network's accuracy on 10,000 test images is 50%. We see varied performance across different classes. For instance, it does well in identifying cars, planes, and ships with accuracies of 59.9%, 57.4%, and 64.2% respectively. However, it struggles with cats and birds, showing only 23.7% and 35.6% accuracy. Ideally, we'd aim for around 70% accuracy, but given the current performance, a realistic target is an overall accuracy of about 60%.
 
-		Accuracy: 
+MLP2.
+For cross-validation in our MLP model, I utilized sklearn's KFold to divide the dataset into 5 parts. The training loop was adjusted to iterate over each fold, creating separate training and validation data loaders. Post training and evaluation, the accuracies were:
+Fold 0: 50.38%
+Fold 1: 49.94%
+Fold 2: 50.72%
+Fold 3: 50.92%
+Fold 4: 49.69%
+Average: 50.33%
 
-			Accuracy of the network on the 10000 test images: 50 %
-			Accuracy for class: plane is 57.4 %
-			Accuracy for class: car   is 59.9 %
-			Accuracy for class: bird  is 35.6 %
-			Accuracy for class: cat   is 23.7 %
-			Accuracy for class: deer  is 54.4 %
-			Accuracy for class: dog   is 41.8 %
-			Accuracy for class: frog  is 57.4 %
-			Accuracy for class: horse is 56.6 %
-			Accuracy for class: ship  is 64.2 %
-			Accuracy for class: truck is 55.4 %
-
-		Seems to be a toss-up on whether or not the model can determine things overall. However, upon individual inspection, it seems as though we are
-		doing fairly well with finding cars, planes, and ships. The reverse of this though, we are doing extremely poor finding cats and birds. Ideally
-		we'd like these numbers to be close to 70% but that may be too optimistic for this model/project. So we will shoot for hopefully an overall
-		network accuracy of ~60%.
-
-	MLP2.
-		In the MLP model for the CIFAR-10 dataset, incorporating a validation step significantly enhances training effectiveness. Through regular validation checks after each training epoch, I can pinpoint the ideal moment to halt training, helping to prevent overfitting. This is evident when the model performs increasingly well on training data but starts faltering on validation data.
-
-		Moreover, validation insights are key in fine-tuning hyperparameters and adjusting the model's architecture. If the model underperforms on the validation set, it suggests a need for modifications—perhaps a more complex structure or extended training. Conversely, a pronounced gap between training and validation performance could indicate overfitting, necessitating the introduction of regularization methods. Ultimately, this approach ensures the model's robust generalization, preparing it for effective real-world application.
-
-		Taking this cross-validation into account, our overall accuracy rose to 51% meanwhile many classes rose as well. Most notably, ships rose from 64.2% to 71.1% but a class like deer fell from 54.4% to 42.4% overall.
-
-	MLP3.
-		First, to address the accuracy measure, we can try to increase the amount of epochs we iterate against to train our data. I will be increasing the amount of epochs from 12 to 25. Below will be the updated accuracies of 25 epochs. 
-
-		Accuracy of 25 epochs:
-			Accuracy of the network on the 10000 test images: 50 %
-			Accuracy for class: plane is 53.1 %
-			Accuracy for class: car   is 58.8 %
-			Accuracy for class: bird  is 29.4 %
-			Accuracy for class: cat   is 33.3 %
-			Accuracy for class: deer  is 43.5 %
-			Accuracy for class: dog   is 41.6 %
-			Accuracy for class: frog  is 60.5 %
-			Accuracy for class: horse is 59.1 %
-			Accuracy for class: ship  is 68.5 %
-			Accuracy for class: truck is 55.3 %	
-
-		It seems increasing our epochs from 12 to 25 did very little, if not it seems the overall validation performed slightly worse but essentially the same. A great thing is that a class like cat has gone up in accuracy, but itseems classes around it have either stagnated or fallen.
-
-		Next, I will try adjusting the learning rate. To keep these fair, I will return epochs to 12 instead of 25. Then once we weight what changes the most, at the end I will implement all methods deemed valuable and check their accuracies.
-
-		Accuracy for 5e-4 learning rate: 
-
-			Accuracy of the network on the 10000 test images: 48 %
-			Accuracy for class: plane is 48.9 %
-			Accuracy for class: car   is 50.8 %
-			Accuracy for class: bird  is 35.4 %
-			Accuracy for class: cat   is 31.0 %
-			Accuracy for class: deer  is 42.0 %
-			Accuracy for class: dog   is 44.1 %
-			Accuracy for class: frog  is 56.7 %
-			Accuracy for class: horse is 52.3 %
-			Accuracy for class: ship  is 73.7 %
-			Accuracy for class: truck is 53.7 %
-
-		With an updated learning rate, it seems like our overall accuracy has decreased, but upon closer inspection I'd say it seems that our lower end of accuracy has actually improved. The parts that have decreased are mostly all other fields except for ship which has rose to 73.7%. This indicates that potentially learning rate could drive accuracy up, but th is learning rate may be far too great.
-
-		I've tested the learning rates 0.5e-4 and 2.5e-4 as well, and it seems like this value does have an effect but the best overall accuracy has been achieved with 1e-4. The learning rate will be reverted to 1e-4 and another method will be implemented.
-
-		Dropout. I've attempted to add dropout as a mechanic to increase overall accuracy. This mechanic has done nothing but decrerase accuracy. Our overall network accuracy decreased to 44% while numberes went as low as 13.6% for the bird class. Dropout is not a method I would continue to use.
-
-		Data augmentation. Implemented data augmentation that randomly horiziontally flips the data and does a random rotation. Then used it for the training set. This yielded an overall network accuracy of 51% with the highest accuracy being ships at 70.7% and the lowest cats at 29.0% which lines up with other methods just about.
-
-		It seems that data augmentation and increasing the learning rate had the most overall positive impact on the accuracy of the network. Dropout had the largest impact but it was largely negative decreasing our base accuracy from 50% to 44%.
+MLP3.
+To improve accuracy, I increased the epochs from 12 to 25. However, this change didn't significantly impact the overall accuracy, which stayed around 50%. Notably, the accuracy for cats improved to 33.3%, but other classes didn't show much improvement. Next, I experimented with different learning rates and found that while some learning rates, like 5e-4, lowered overall accuracy to 48%, they improved performance in lower-accuracy classes. However, the best balance was achieved with a learning rate of 1e-4.
+I also tested dropout and data augmentation strategies. Dropout reduced the overall accuracy significantly, but data augmentation had a positive impact, improving the network's accuracy to 51%.
 
 CNN
-	CNN1.
+CNN1.
+Accuracy:
+The CNN model showed a promising 61% accuracy on 10,000 test images. The model performed consistently across different classes, with the highest accuracies in 'ship' and 'truck' categories at 73.3% and 71.9%. Halfway through the iterations, the loss decreased significantly, suggesting efficient learning.
 
-		Accuracy: 
+CNN2.
+Applying cross-validation using KFold, the CNN model's accuracies hovered around 59%-61%. The breakdown of accuracies per class was as follows:
+Plane: 65%
+Car: 71%
+Bird: 49%
+Cat: 34%
+Deer: 66%
+Dog: 50%
+Frog: 65%
+Horse: 70%
+Ship: 74%
+Truck: 60%
 
-			Accuracy of the network on the 10000 test images: 61 %
-			Accuracy for class: plane is 66.8 %
-			Accuracy for class: car   is 68.8 %
-			Accuracy for class: bird  is 43.2 %
-			Accuracy for class: cat   is 53.7 %
-			Accuracy for class: deer  is 63.9 %
-			Accuracy for class: dog   is 39.0 %
-			Accuracy for class: frog  is 66.6 %
-			Accuracy for class: horse is 66.5 %
-			Accuracy for class: ship  is 73.3 %
-			Accuracy for class: truck is 71.9 %
+CNN3.
+The model maintained an overall accuracy of 60%. Notably, the precision, recall, and F1 score for the 'cat' class were 0.40, 0.34, and 0.37, respectively. These metrics highlight that the model's performance can vary depending on whether we prioritize minimizing false positives (precision) or maximizing true positives (recall).
 
-			The loss was hitting below 1 even halfway through the iterations. That means that the loss was over half of it's original value by the time we were 5/10 iterations through.
-
-	CNN2.
-
-		To add cross-validation to this CNN model, I imported KFold from sklearn to split the data set into 5 folds. Then modified the training loop to iterate over each fold using a different subset of data for training/validation in each fold. Then inside each loop, data loaders for training and validation are created by basing it off the indicies of the K-Fold. The model is trained, saved, and evaluated on each fold.
-
-		Accuracy: 
-
-			Each fold seemed to hover anywhere from 59%-61% accuracy. The scores at the end were: 
-
-			Accuracy of the network on the 10000 test images: 60 %
-			Accuracy of plane : 65 %
-			Accuracy of   car : 71 %
-			Accuracy of  bird : 49 %
-			Accuracy of   cat : 34 %
-			Accuracy of  deer : 66 %
-			Accuracy of   dog : 50 %
-			Accuracy of  frog : 65 %
-			Accuracy of horse : 70 %
-			Accuracy of  ship : 74 %
-			Accuracy of truck : 60 %
-
-	CNN3.
-
-		Accuracy of the network on the 10000 test images: 60 %
-		Accuracy of plane : 65 %
-		Accuracy of   car : 71 %
-		Accuracy of  bird : 49 %
-		Accuracy of   cat : 34 %
-		Accuracy of  deer : 66 %
-		Accuracy of   dog : 50 %
-		Accuracy of  frog : 65 %
-		Accuracy of horse : 70 %
-		Accuracy of  ship : 74 %
-		Accuracy of truck : 60 %
-		Precision for "cat": 0.40
-		Recall for "cat": 0.34
-		F1 Score for "cat": 0.37
-
-		It really depends on our goal. If our goal is to minimize the amount of false 'cats' then we'd use precision. If our goal was to get as many 'cats' then we'd use recall. F1 is a balance of these two metrics, so I'd say that one is the most valuable unless our goal is specific.
 CC
-	CC1.
+CC1.
+Comparing the MLP and CNN models, the CNN consistently outperformed the MLP with an average accuracy over 60%. This aligns with my expectations as CNNs are generally more adept at handling image data. In my trials, I noticed some underfitting with dropout in the MLP model, leading me to explore other techniques.
 
 PB
-	PB1.
+PB1.
+In the Net class, we have a composition of Conv2d, MaxPool2d, and Linear layers. The total number of parameters, primarily in the convolutional and fully connected layers, adds up to 62,006. This was confirmed using PyTorch's parameters() function, ensuring the accuracy of our manual computation.
 
-	PB2.
+PB2.
+All 62,006 parameters in the CIFAR-10 CNN's Net class are trainable, located in the Conv2d and Linear layers. These parameters are updated through gradient descent during backpropagation, as confirmed by PyTorch's functionality.
 
-	PB3.
+PB3.
+The batch_size parameter is crucial in our CIFAR-10 neural network assignments. A smaller batch size, while leading to noisier gradient estimations, can help in avoiding local minima. Conversely, larger batch sizes offer more stable gradients but require more computational resources. The optimal batch size strikes a balance between training stability and resource constraints.
 
-	PB4.
+PB4.
+In an assignment involving a dataset with 100 binary attributes, a complete binary decision tree would be impractical due to its massive size. A more effective approach focuses on the most influential attribute, a1, which determines the target variable y in most cases. This results in a simpler, more generalizable tree that avoids the pitfalls of overfitting associated with a complete tree structure.
